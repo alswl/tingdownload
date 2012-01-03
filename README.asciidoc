@@ -19,7 +19,18 @@ Baidu Ting的音乐质量是128KBps，音质算好，里面的idv3信息也勉�
 
 代码在https://github.com/alswl/tingdownload[github-tingdownload]
 
+== 需要 ==
+
+* Python 2 (仅在Python2.7下测试)
+* BeautifulSoup(已包含在目录下)
+* simplejson（已包含在目录下)
+* 一点点Python基础
+* Linux/Windows（我在Linux没问题，Windows应该也可以）
+
 == 使用方法 ==
+
+在Shell(命令行)里输入下面随便一个命令，就会在当前目录下面出现 `musics` 文件夹，
+里面就有下载好的音乐。
 
 ----
 python tingdownload.py 老男孩 #单个文件下载
