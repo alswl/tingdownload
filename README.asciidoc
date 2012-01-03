@@ -1,0 +1,97 @@
+度娘终于干了一件好事，http://ting.baidu.com[Baidu Ting]上线了，
+正版音乐免费下载，类似于http://www.google.cn/music[谷歌音乐]。
+关于音乐版权和免费的问题， 有很多问题需要取讨论，
+比如说这种商业模式是否对传统唱片业产生冲击又或是有积极影响？
+作为普通消费者，暂时不用考虑这些问题，先享受这些服务好了。
+
+Baidu Ting的音乐质量是128KBps，音质算好，里面的idv3信息也勉强可以，有:
+
+* 歌名
+* 歌手
+* 部分专辑名（偶尔也出现“201-8月新歌快递”这种比较山寨的字）
+* 部分唱片封面图片
+
+虽然比不上谷歌音乐连歌曲风格都准备好了，但是比杂乱无章的那些音乐mp3要好太多了。
+
+== 自动下载脚本tingdownload ==
+
+早上下了几首音乐，就顺手写了一个脚本，用来批量从Badu Ting下载音乐。
+
+代码在https://github.com/alswl/tingdownload[github-tingdownload]
+
+== 使用方法 ==
+
+----
+python tingdownload.py 老男孩 #单个文件下载
+./tingdownload.py 老男孩 #单个文件下载（给python文件加上可执行权限）
+python tingdownload.py 老男孩 Raise\n Me\n Up # 多文件名，如果有空格，请记得加上空格反转'\n'
+----
+
+批量下载的话，可以准备一个列表文件，每个歌曲名用回车隔开，如下：
+
+----
+还过得去
+不敢太幸福
+小情歌
+爱情靠不住
+我爱我
+你可以不用给我答案 	金莎
+没有这首歌 	后弦
+	回不去了吗 	萧亚轩
+	有些事现在不做 一辈子都不会做了 	五月天
+	第一夫人 	张杰
+----
+
+将这个list文件作为输入传入执行脚本：
+
+----
+cat list | python2.7 tingdownload.py
+----
+
+运行结果如下，列出四种情况：
+
+* 下载成功，如果文件已经存在，会跳过
+* 下载失败，由于网络原因
+* 下载失败，由于关键词不准确而出现太多结果
+* 下载失败，没有关键词匹配的结果
+
+----
+download success:
+
+你可以不用给我答案 	金莎
+没有这首歌 	后弦
+	回不去了吗 	萧亚轩
+	有些事现在不做 一辈子都不会做了 	五月天
+	第一夫人 	张杰
+download failed for network error:
+
+
+
+download failed for too many result:
+
+学不会
+Mine Mine
+父亲
+你好吗
+小情歌
+我爱我
+
+
+download failed for not fount:
+
+download failed for file exists:
+
+最接近天堂的地方
+不存在的情人
+一样爱着你
+考试什么的去死吧
+电话里的秘密
+不是秘密的秘密
+还过得去
+不敢太幸福
+爱情靠不住
+----
+
+Enjoy it.
+
+// vim: set ft=asciidoc:
