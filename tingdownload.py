@@ -108,11 +108,13 @@ class TingDownload(object):
         if os.path.exists(os.path.join(self.MUSICS_DIR, self.name)):
             raise FileExistError
 
-        file = open(os.path.join(self.MUSICS_DIR, self.name), 'w')
+        file = open(os.path.join(self.MUSICS_DIR,
+                                 self.music_info.artist_name + '-' + \
+                                 self.music_info.song_name + '.mp3'
+                                ), 'w')
         handler = urllib2.urlopen(self.target_url)
         file.write(handler.read())
         file.close()
-
 
 def main():
     log_success = 'download success:\n\n'
