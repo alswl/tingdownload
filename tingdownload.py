@@ -3,7 +3,7 @@
 
 # desc: download mp3 from ting.baidu.com
 # author: alswl <http://log4d.com>
-# date: 2012-01-03
+# date: 2012-01-06
 
 import sys
 import os
@@ -117,23 +117,29 @@ class TingDownload(object):
         try:
             self.music_info = self.search()
         except urllib2.URLError, e:
-            log.error(e)
+            log.info('# Failed: Check network.')
             raise DownloadError(e)
         except NotFoundError, e:
-            log.error(e)
+            log.info(e)
             raise e
         except TooMoreFoundError, e:
-            log.error(e)
+            log.info(e)
             raise e
 
-        if os.path.exists(os.path.join(
-            self.MUSICS_DIR,
-            self.music_info.artist_name + '-' \
-            + self.music_info.song_name + '.mp3'
-            )):
-            raise FileExistError
-        self.target_url = self.fetchMusic()
-        self.write_file()
+        try:
+            path_name = os.path.join(self.MUSICS_DIR,
+                                     self.music_info.artist_name + '-' \
+                                     + self.music_info.song_name + '.mp3'
+                                    )
+            if os.path.exists(path_name):
+                raise FileExistError('# Success: File "%s" exists.' %path_name)
+            self.target_url = self.fetchMusic()
+            self.write_file()
+        except urllib2.URLError, e:
+            log.info(e)
+            raise DownloadError(e)
+        except FileExistError, e:
+            log.info(e)
 
     def search(self):
         word = urllib2.quote(self.name.encode('utf-8'))
@@ -142,10 +148,12 @@ class TingDownload(object):
         json_text  = handler.read()
         json_result = json.loads(json_text.strip()[17: -2])
         if len(json_result['song']) < 1:
-            raise NotFoundError(u"can't find song %s" %self.name)
+            raise NotFoundError(u"#Failed: Can't find song %s." %self.name)
         elif len(json_result['song']) > 1:
-            raise TooMoreFoundError(u"too more result found for keyword %s"
-                                    %self.name)
+            raise TooMoreFoundError(
+                u"Failed: Too more result found for keyword %s."
+                %self.name
+                )
         else:
             music = MusicInfo(json_result['song'][0]['songid'],
                               json_result['song'][0]['songname'],
@@ -171,10 +179,10 @@ class TingDownload(object):
 def main():
     # prepare args
     parser = argparse.ArgumentParser(
-        description='download music from ting.baidu.com'
+        description='A script to download music from ting.baidu.com.'
         )
     parser.add_argument('keywords',
-                        metavar='N',
+                        metavar='Keyword',
                         type=str,
                         nargs='*',
                        )
@@ -185,6 +193,8 @@ def main():
     keywords = args.keywords
     if args.input != None:
         keywords += args.input.read().splitlines()
+    if len(keywords) == 0:
+        parser.print_help()
 
     # prepare logs
     log200 = TingDownloadInfo200()
@@ -196,7 +206,7 @@ def main():
     for name in keywords:
         #log.debug(name)
         try:
-            log.info('Start download %s...' \
+            log.info('> Start download %s...' \
                      %name.strip())
             tingDownload = TingDownload(re.sub(r'\s+', ' ', name.strip()))
             tingDownload.download()
