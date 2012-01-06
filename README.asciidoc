@@ -33,6 +33,22 @@ Baidu Ting的音乐质量是128KBps，音质算好，里面的idv3信息也勉�
 里面就有下载好的音乐。
 
 ----
+# 使用说明
+usage: tingdownload.py [-h] [--input INPUT] [Keyword [Keyword ...]]
+
+A script to download music from ting.baidu.com.
+
+positional arguments:
+  Keyword
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --input INPUT, -i INPUT
+                        a list file to input musics
+----
+
+----
+# 示例
 python tingdownload.py 老男孩 #单个文件下载
 ./tingdownload.py 老男孩 #单个文件下载（给python文件加上可执行权限）
 python tingdownload.py 老男孩 Raise\n Me\n Up # 多文件名，如果有空格，请记得加上空格反转'\n'
@@ -56,7 +72,7 @@ python tingdownload.py 老男孩 Raise\n Me\n Up # 多文件名，如果有空�
 将这个list文件作为输入传入执行脚本：
 
 ----
-cat list | python2.7 tingdownload.py
+python2.7 tingdownload.py --input ~/music.txt
 ----
 
 运行结果如下，列出四种情况：
@@ -67,40 +83,25 @@ cat list | python2.7 tingdownload.py
 * 下载失败，没有关键词匹配的结果
 
 ----
-download success:
+█▓▒░alswl@x201█▓▒░ ~/dev/project/python/tingdownload/ ./tingdownload.py 黄昏\ 周传雄 考试什么 --input ~/a.txt
+> Start download 黄昏 周传雄...
+# Info: File "/home/alswl/dev/project/python/tingdownload/musics/周传雄-黄昏.mp3" exists.
+> Start download 考试什么...
+# Info: File "/home/alswl/dev/project/python/tingdownload/musics/徐良-考试什么的去死吧.mp3" exists.
+> Start download 还过得去...
+> Start download 不敢太幸福...
+> Start download 小情歌...
+Failed: Too more result found for keyword 小情歌.
+> Start download 爱情靠不住...
 
-你可以不用给我答案 	金莎
-没有这首歌 	后弦
-	回不去了吗 	萧亚轩
-	有些事现在不做 一辈子都不会做了 	五月天
-	第一夫人 	张杰
-download failed for network error:
-
-
-
-download failed for too many result:
-
-学不会
-Mine Mine
-父亲
-你好吗
-小情歌
-我爱我
-
-
-download failed for not fount:
-
-download failed for file exists:
-
-最接近天堂的地方
-不存在的情人
-一样爱着你
-考试什么的去死吧
-电话里的秘密
-不是秘密的秘密
+== Download success (4) ==
+黄昏 周传雄
+考试什么
 还过得去
 不敢太幸福
-爱情靠不住
+
+== Download failed for too many result (1) ==
+小情歌
 ----
 
 Enjoy it.
