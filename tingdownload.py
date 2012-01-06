@@ -70,7 +70,7 @@ class TingDownloadInfo200(TingDownloadInfo):
 class TingDownloadInfo304(TingDownloadInfo):
     def __init__(self):
         super(TingDownloadInfo304, self).__init__()
-        self.message = 'Download success for file exists'
+        self.message = 'Download failed for file exists'
 
 class TingDownloadInfo400(TingDownloadInfo):
     def __init__(self):
@@ -154,8 +154,6 @@ class TingDownload(object):
 
     def fetchMusic(self):
         """get the link of music"""
-        log.info('Start download %s - %s...' \
-                 %(self.music_info.artist_name, self.music_info.song_name))
         page = urllib2.urlopen(self.DOWNLOAD_URL %self.music_info.id).read()
         link = BeautifulSoup(page).a
         return self.TARGET_URL %link['href']
@@ -198,8 +196,11 @@ def main():
     for name in keywords:
         #log.debug(name)
         try:
+            log.info('Start download %s...' \
+                     %name.strip())
             tingDownload = TingDownload(re.sub(r'\s+', ' ', name.strip()))
-            tingDownload.download() # FIXME
+            tingDownload.download()
+            log200.log(name)
         except NotFoundError, e:
             log404.log(name)
             continue
@@ -212,13 +213,17 @@ def main():
         except FileExistError, e:
             log304.log(name)
             continue
-        log200.log(name)
+        except KeyboardInterrupt:
+            break
 
+    print_result(log200, log304, log400, log404, log500)
+
+def print_result(log200, log304, *failed_logs):
+    sys.stdout.write('\n')
     sys.stdout.write(log200.get_result())
     sys.stdout.write(log304.get_result())
-    sys.stderr.write(log400.get_result())
-    sys.stderr.write(log404.get_result())
-    sys.stderr.write(log500.get_result())
+    for log in failed_logs:
+        sys.stdout.write(log.get_result())
 
 if __name__ == '__main__':
     main()
