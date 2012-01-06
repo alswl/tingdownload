@@ -40,6 +40,53 @@ class FileExistError(Exception):
     """a user defined exception for file exist"""
     pass
 
+class TingDownloadInfo(object):
+    """result info"""
+    count = 0
+    header = '== %(message)s (%(count)d) ==\n'
+    log_text = ''
+    message = ''
+
+    def __init__(self):
+        pass
+
+    def log(self, text):
+        self.log_text += text + '\n'
+        self.count += 1
+
+    def get_result(self):
+        if self.count == 0:
+            return ''
+        result = self.header %{'message': self.message, 'count': self.count}
+        for line in self.log_text:
+            result += line
+        return result + '\n'
+
+class TingDownloadInfo200(TingDownloadInfo):
+    def __init__(self):
+        super(TingDownloadInfo200, self).__init__()
+        self.message = 'Download success'
+
+class TingDownloadInfo304(TingDownloadInfo):
+    def __init__(self):
+        super(TingDownloadInfo304, self).__init__()
+        self.message = 'Download success for file exists'
+
+class TingDownloadInfo400(TingDownloadInfo):
+    def __init__(self):
+        super(TingDownloadInfo400, self).__init__()
+        self.message = 'Download failed for too many result'
+
+class TingDownloadInfo404(TingDownloadInfo):
+    def __init__(self):
+        super(TingDownloadInfo404, self).__init__()
+        self.message = 'Download failed for not fount'
+
+class TingDownloadInfo500(TingDownloadInfo):
+    def __init__(self):
+        super(TingDownloadInfo500, self).__init__()
+        self.message = 'Download failed for network error'
+
 class MusicInfo(object):
     """ting music"""
 
@@ -79,6 +126,12 @@ class TingDownload(object):
             log.error(e)
             raise e
 
+        if os.path.exists(os.path.join(
+            self.MUSICS_DIR,
+            self.music_info.artist_name + '-' \
+            + self.music_info.song_name + '.mp3'
+            )):
+            raise FileExistError
         self.target_url = self.fetchMusic()
         self.write_file()
 
@@ -101,15 +154,14 @@ class TingDownload(object):
 
     def fetchMusic(self):
         """get the link of music"""
+        log.info('Start download %s - %s...' \
+                 %(self.music_info.artist_name, self.music_info.song_name))
         page = urllib2.urlopen(self.DOWNLOAD_URL %self.music_info.id).read()
         link = BeautifulSoup(page).a
         return self.TARGET_URL %link['href']
 
     def write_file(self):
         """save music to disk"""
-        if os.path.exists(os.path.join(self.MUSICS_DIR, self.name)):
-            raise FileExistError
-
         file = open(os.path.join(self.MUSICS_DIR,
                                  self.music_info.artist_name + '-' + \
                                  self.music_info.song_name + '.mp3'
@@ -137,36 +189,36 @@ def main():
         keywords += args.input.read().splitlines()
 
     # prepare logs
-    log_200 = '== Download success ==\n'
-    log_404 = '== Download failed for not fount == n'
-    log_400 = '== Download failed for too many result ==\n'
-    log_500 = '== Download failed for network error ==\n'
-    log_304 = '== Download failed for file exists ==\n'
+    log200 = TingDownloadInfo200()
+    log304 = TingDownloadInfo304()
+    log400 = TingDownloadInfo400()
+    log404 = TingDownloadInfo404()
+    log500 = TingDownloadInfo500()
 
     for name in keywords:
         #log.debug(name)
         try:
             tingDownload = TingDownload(re.sub(r'\s+', ' ', name.strip()))
-            #tingDownload.download() # FIXME
+            tingDownload.download() # FIXME
         except NotFoundError, e:
-            log_404 += name +'\n'
+            log404.log(name)
             continue
         except TooMoreFoundError, e:
-            log_400 += name +'\n'
+            log400.log(name)
             continue
         except DownloadError, e:
-            log_500 += name +'\n'
+            log500.log(name)
             continue
         except FileExistError, e:
-            log_304 += name +'\n'
+            log304.log(name)
             continue
-        log_success += name + '\n'
+        log200.log(name)
 
-    sys.stdout.write(log_200)
-    sys.stderr.write(log_500 + '\n\n')
-    sys.stderr.write(log_400 + '\n\n')
-    sys.stderr.write(log_404)
-    sys.stderr.write(log_304)
+    sys.stdout.write(log200.get_result())
+    sys.stdout.write(log304.get_result())
+    sys.stderr.write(log400.get_result())
+    sys.stderr.write(log404.get_result())
+    sys.stderr.write(log500.get_result())
 
 if __name__ == '__main__':
     main()
