@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #coding=utf-8
 
 # desc: download mp3 from ting.baidu.com
@@ -11,13 +11,15 @@ from urlparse import urlparse
 import urllib2
 import logging
 import re
+import argparse
 
 import simplejson as json
 from BeautifulSoup import BeautifulSoup
 
 log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
-log.setLevel(logging.ERROR)
+#log.setLevel(logging.ERROR)
+log.setLevel(logging.DEBUG)
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -117,36 +119,54 @@ class TingDownload(object):
         file.close()
 
 def main():
-    log_success = 'download success:\n\n'
-    log_fail_404 = 'download failed for not fount:\n\n'
-    log_fail_400 = 'download failed for too many result:\n\n'
-    log_fail_500 = 'download failed for network error:\n\n'
-    log_fail_file_exists = 'download failed for file exists:\n\n'
+    # prepare args
+    parser = argparse.ArgumentParser(
+        description='download music from ting.baidu.com'
+        )
+    parser.add_argument('keywords',
+                        metavar='N',
+                        type=str,
+                        nargs='*',
+                       )
+    parser.add_argument('--input', '-i',
+                        help='a list file to input musics',
+                        type=argparse.FileType('r'))
+    args = parser.parse_args()
+    keywords = args.keywords
+    if args.input != None:
+        keywords += args.input.read().splitlines()
 
-    for name in sys.argv[1:] + sys.stdin.read().splitlines():
-        log.debug(name)
+    # prepare logs
+    log_200 = '== Download success ==\n'
+    log_404 = '== Download failed for not fount == n'
+    log_400 = '== Download failed for too many result ==\n'
+    log_500 = '== Download failed for network error ==\n'
+    log_304 = '== Download failed for file exists ==\n'
+
+    for name in keywords:
+        #log.debug(name)
         try:
             tingDownload = TingDownload(re.sub(r'\s+', ' ', name.strip()))
-            tingDownload.download()
+            #tingDownload.download() # FIXME
         except NotFoundError, e:
-            log_fail_404 += name +'\n'
+            log_404 += name +'\n'
             continue
         except TooMoreFoundError, e:
-            log_fail_400 += name +'\n'
+            log_400 += name +'\n'
             continue
         except DownloadError, e:
-            log_fail_500 += name +'\n'
+            log_500 += name +'\n'
             continue
         except FileExistError, e:
-            log_fail_file_exists += name +'\n'
+            log_304 += name +'\n'
             continue
         log_success += name + '\n'
 
-    sys.stdout.write(log_success)
-    sys.stderr.write(log_fail_500 + '\n\n')
-    sys.stderr.write(log_fail_400 + '\n\n')
-    sys.stderr.write(log_fail_404)
-    sys.stderr.write(log_fail_file_exists)
+    sys.stdout.write(log_200)
+    sys.stderr.write(log_500 + '\n\n')
+    sys.stderr.write(log_400 + '\n\n')
+    sys.stderr.write(log_404)
+    sys.stderr.write(log_304)
 
 if __name__ == '__main__':
     main()
