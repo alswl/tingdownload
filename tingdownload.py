@@ -145,10 +145,10 @@ class TingDownload(object):
         json_text  = handler.read()
         json_result = json.loads(json_text.strip()[17: -2])
         if len(json_result['song']) < 1:
-            raise NotFoundError(u"#Failed: Can't find song %s." %self.name)
+            raise NotFoundError(u"# Failed: Can't find song %s." %self.name)
         elif len(json_result['song']) > 1:
             raise TooMoreFoundError(
-                u"Failed: Too more result found for keyword %s."
+                u"# Failed: Too more result found for keyword %s."
                 %self.name
                 )
         else:
