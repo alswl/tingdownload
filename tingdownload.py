@@ -127,12 +127,9 @@ class TingDownload(object):
             raise e
 
         try:
-            path_name = os.path.join(self.MUSICS_DIR,
-                                     self.music_info.artist_name + '-' \
-                                     + self.music_info.song_name + '.mp3'
-                                    )
-            if os.path.exists(path_name):
-                raise FileExistError('# Success: File "%s" exists.' %path_name)
+            if os.path.exists(self.path_name):
+                raise FileExistError('# Info: File "%s" exists.' \
+                                     %self.path_name)
             self.target_url = self.fetchMusic()
             self.write_file()
         except urllib2.URLError, e:
@@ -158,6 +155,11 @@ class TingDownload(object):
             music = MusicInfo(json_result['song'][0]['songid'],
                               json_result['song'][0]['songname'],
                               json_result['song'][0]['artistname'])
+            self.path_name = os.path.join(
+                self.MUSICS_DIR,
+                music.artist_name + '-' \
+                + music.song_name + '.mp3'
+                )
             return music
 
     def fetchMusic(self):
@@ -168,10 +170,7 @@ class TingDownload(object):
 
     def write_file(self):
         """save music to disk"""
-        file = open(os.path.join(self.MUSICS_DIR,
-                                 self.music_info.artist_name + '-' + \
-                                 self.music_info.song_name + '.mp3'
-                                ), 'w')
+        file = open(self.path_name, 'w')
         handler = urllib2.urlopen(self.target_url)
         file.write(handler.read())
         file.close()
@@ -219,11 +218,13 @@ def main():
             continue
         except DownloadError, e:
             log500.log(name)
+            os.remove(tingDownload.path_name) # delte the error file
             continue
         except FileExistError, e:
             log304.log(name)
             continue
         except KeyboardInterrupt:
+            os.remove(tingDownload.path_name) # delte the error file
             break
 
     print_result(log200, log304, log400, log404, log500)
