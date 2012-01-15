@@ -23,7 +23,7 @@ log.addHandler(logging.StreamHandler())
 log.setLevel(logging.DEBUG)
 
 reload(sys)
-sys.setdefaultencoding('utf-8')
+sys.setdefaultencoding(sys.getfilesystemencoding()) # for cross-platform
 
 class DownloadError(Exception):
     """a user defined exception for download error"""
