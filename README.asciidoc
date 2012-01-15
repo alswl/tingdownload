@@ -23,7 +23,7 @@ Baidu Ting的音乐质量是128KBps，音质算好，里面的idv3信息也勉�
 
 * Python 2 (仅在Python2.7下测试)
 * BeautifulSoup(已包含在目录下)
-* simplejson（已包含在目录下)
+* simplejson（已删除，我还是用原装json吧，省掉一个包）
 * 一点点Python基础
 * Linux/Windows（我在Linux没问题，Windows应该也可以）
 
