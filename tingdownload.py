@@ -8,6 +8,7 @@
 import sys
 import os
 from urlparse import urlparse
+import urllib
 import urllib2
 import logging
 import re
@@ -170,10 +171,7 @@ class TingDownload(object):
 
     def write_file(self):
         """save music to disk"""
-        file = open(self.path_name, 'w')
-        handler = urllib2.urlopen(self.target_url)
-        file.write(handler.read())
-        file.close()
+        urllib.urlretrieve(self.target_url, self.path_name)
 
 def main():
     # prepare args
