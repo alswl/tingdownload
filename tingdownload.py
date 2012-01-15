@@ -14,7 +14,7 @@ import logging
 import re
 import argparse
 
-import simplejson as json
+import json
 from BeautifulSoup import BeautifulSoup
 
 log = logging.getLogger()
