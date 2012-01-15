@@ -173,6 +173,17 @@ class TingDownload(object):
         """save music to disk"""
         urllib.urlretrieve(self.target_url, self.path_name)
 
+def zh2unicode(text):
+    """
+    Auto converter encodings to unicode
+    It will test utf8, gbk, big5, jp, kr to converter"""
+    for encoding in ('utf-8', 'gbk', 'big5', 'jp', 'euc_kr','utf16','utf32'):
+        try:
+            return text.decode(encoding)
+        except:
+            pass
+    return text
+
 def main():
     # prepare args
     parser = argparse.ArgumentParser(
@@ -189,7 +200,7 @@ def main():
     args = parser.parse_args()
     keywords = args.keywords
     if args.input != None:
-        keywords += args.input.read().splitlines()
+        keywords += zh2unicode(args.input.read()).splitlines()
     if len(keywords) == 0:
         parser.print_help()
 
