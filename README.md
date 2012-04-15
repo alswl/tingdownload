@@ -101,4 +101,6 @@ Baidu Ting的音乐质量是128KBps，音质算好，里面的idv3信息也勉�
 
 Enjoy it.
 
-// vim: set ft=markdown expandtab nosmartindent:
+Powered by [@alswl](http://log4d.com)
+
+<!--vim: set ft=markdown expandtab nosmartindent:-->
