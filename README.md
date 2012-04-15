@@ -54,16 +54,16 @@ Baidu Ting的音乐质量是128KBps，音质算好，里面的idv3信息也勉�
 
 批量下载的话，可以准备一个列表文件，每个歌曲名用回车隔开，如下：
 
->还过得去
->不敢太幸福
->小情歌
->爱情靠不住
->我爱我
->你可以不用给我答案 	金莎
->没有这首歌 	后弦
->    回不去了吗 	萧亚轩
->    有些事现在不做 一辈子都不会做了 	五月天
->    第一夫人 	张杰
+    还过得去
+    不敢太幸福
+    小情歌
+    爱情靠不住
+    我爱我
+    你可以不用给我答案 	金莎
+    没有这首歌 	后弦
+        回不去了吗 	萧亚轩
+        有些事现在不做 一辈子都不会做了 	五月天
+        第一夫人 	张杰
 
 将这个list文件作为输入传入执行脚本：
 
@@ -77,26 +77,26 @@ Baidu Ting的音乐质量是128KBps，音质算好，里面的idv3信息也勉�
 * 下载失败，没有关键词匹配的结果
 
 
->█▓▒░alswl@x201█▓▒░ ~/dev/project/python/tingdownload/ ./tingdownload.py 黄昏\ 周传雄 考试什么 --input ~/a.txt
->> Start download 黄昏 周传雄...
-># Info: File "/home/alswl/dev/project/python/tingdownload/musics/周传雄-黄昏.mp3" exists.
->> Start download 考试什么...
-># Info: File "/home/alswl/dev/project/python/tingdownload/musics/徐良-考试什么的去死吧.mp3" exists.
->> Start download 还过得去...
->> Start download 不敢太幸福...
->> Start download 小情歌...
-># Failed: Too more result found for keyword 小情歌.
->> Start download 爱情靠不住...
->
->== Download success (4) ==
->黄昏 周传雄
->考试什么
->还过得去
->不敢太幸福
->
->== Download failed for too many result (1) ==
->小情歌
+    █▓▒░alswl@x201█▓▒░ ~/dev/project/python/tingdownload/ ./tingdownload.py 黄昏\ 周传雄 考试什么 --input ~/a.txt
+    > Start download 黄昏 周传雄...
+    # Info: File "/home/alswl/dev/project/python/tingdownload/musics/周传雄-黄昏.mp3" exists.
+    > Start download 考试什么...
+    # Info: File "/home/alswl/dev/project/python/tingdownload/musics/徐良-考试什么的去死吧.mp3" exists.
+    > Start download 还过得去...
+    > Start download 不敢太幸福...
+    > Start download 小情歌...
+    # Failed: Too more result found for keyword 小情歌.
+    > Start download 爱情靠不住...
+
+    == Download success (4) ==
+    黄昏 周传雄
+    考试什么
+    还过得去
+    不敢太幸福
+
+    == Download failed for too many result (1) ==
+    小情歌
 
 Enjoy it.
 
-// vim: set ft=markdown expandtab:
+// vim: set ft=markdown expandtab nosmartindent:
