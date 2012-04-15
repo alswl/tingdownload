@@ -77,25 +77,27 @@ Baidu Ting的音乐质量是128KBps，音质算好，里面的idv3信息也勉�
 * 下载失败，没有关键词匹配的结果
 
 
-    █▓▒░alswl@x201█▓▒░ ~/dev/project/python/tingdownload/ ./tingdownload.py 黄昏\ 周传雄 考试什么 --input ~/a.txt
-    > Start download 黄昏 周传雄...
-    # Info: File "/home/alswl/dev/project/python/tingdownload/musics/周传雄-黄昏.mp3" exists.
-    > Start download 考试什么...
-    # Info: File "/home/alswl/dev/project/python/tingdownload/musics/徐良-考试什么的去死吧.mp3" exists.
-    > Start download 还过得去...
-    > Start download 不敢太幸福...
-    > Start download 小情歌...
-    # Failed: Too more result found for keyword 小情歌.
-    > Start download 爱情靠不住...
+<pre>
+█▓▒░alswl@x201█▓▒░ ~/dev/project/python/tingdownload/ ./tingdownload.py 黄昏\ 周传雄 考试什么 --input ~/a.txt
+> Start download 黄昏 周传雄...
+# Info: File "/home/alswl/dev/project/python/tingdownload/musics/周传雄-黄昏.mp3" exists.
+> Start download 考试什么...
+# Info: File "/home/alswl/dev/project/python/tingdownload/musics/徐良-考试什么的去死吧.mp3" exists.
+> Start download 还过得去...
+> Start download 不敢太幸福...
+> Start download 小情歌...
+# Failed: Too more result found for keyword 小情歌.
+> Start download 爱情靠不住...
 
-    == Download success (4) ==
-    黄昏 周传雄
-    考试什么
-    还过得去
-    不敢太幸福
+== Download success (4) ==
+黄昏 周传雄
+考试什么
+还过得去
+不敢太幸福
 
-    == Download failed for too many result (1) ==
-    小情歌
+== Download failed for too many result (1) ==
+小情歌
+</pre>
 
 Enjoy it.
 
